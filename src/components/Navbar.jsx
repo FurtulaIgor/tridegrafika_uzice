@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import logo from '@assets/images/rsz_1rsz_logo2.png';
 
@@ -9,92 +9,96 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const isScrolled = window.scrollY > 0;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [scrolled]);
+
+  const navLinks = [
+    { href: '#home', label: 'Početna' },
+    { href: '#services', label: 'Usluge' },
+    { href: '#about', label: 'O Nama' },
+    { href: '#contact', label: 'Kontakt' },
+  ];
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+    <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+        scrolled ? 'bg-white shadow-md' : 'bg-transparent'
       }`}
     >
-      <div className="container">
+      <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-20">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center"
-          >
-            <img src={logo} alt="3D Grafika Logo" className="h-25 w-auto" />
-          </motion.div>
+          <a href="#home" className="flex items-center">
+            <img
+              src={logo}
+              alt="3D Grafika Logo"
+              className="h-16"
+            />
+          </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
-            <NavLink href="#home">Početna</NavLink>
-            <NavLink href="#services">Usluge</NavLink>
-            <NavLink href="#location">Lokacija</NavLink>
-            <NavLink href="#contact">Kontakt</NavLink>
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-gray-400 hover:text-primary transition-colors font-medium"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
 
           {/* Mobile Navigation Button */}
           <button
-            className="md:hidden text-gray-600"
             onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-gray-400 hover:text-primary focus:outline-none"
+            aria-label="Toggle menu"
           >
-            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            {isOpen ? (
+              <FaTimes className="w-6 h-6 text-white" />
+            ) : (
+              <FaBars className="w-6 h-6 text-white" />
+            )}
           </button>
         </div>
+      </div>
 
-        {/* Mobile Navigation Menu */}
+      {/* Mobile Menu */}
+      <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="md:hidden"
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-gray-900 bg-opacity-95"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <MobileNavLink href="#home" onClick={() => setIsOpen(false)}>
-                Početna
-              </MobileNavLink>
-              <MobileNavLink href="#services" onClick={() => setIsOpen(false)}>
-                Usluge
-              </MobileNavLink>
-              <MobileNavLink href="#location" onClick={() => setIsOpen(false)}>
-                Lokacija
-              </MobileNavLink>
-              <MobileNavLink href="#contact" onClick={() => setIsOpen(false)}>
-                Kontakt
-              </MobileNavLink>
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex flex-col space-y-4">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-gray-400 hover:text-primary transition-colors font-medium text-lg"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
-      </div>
-    </motion.nav>
+      </AnimatePresence>
+    </nav>
   );
 };
-
-const NavLink = ({ href, children }) => (
-  <a
-    href={href}
-    className="text-gray-500 hover:text-primary transition-colors duration-300"
-  >
-    {children}
-  </a>
-);
-
-const MobileNavLink = ({ href, children, onClick }) => (
-  <a
-    href={href}
-    onClick={onClick}
-    className="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md transition-colors duration-300"
-  >
-    {children}
-  </a>
-);
 
 export default Navbar; 
