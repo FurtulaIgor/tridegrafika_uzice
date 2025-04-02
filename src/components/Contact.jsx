@@ -84,7 +84,7 @@ const Contact = () => {
                 <div>
                   <h4 className="font-semibold">Email</h4>
                   <a href="mailto:terminalkog@gmail.com" className="text-gray-600 hover:text-primary">
-                    terminalkog@gmail.com
+                    tridegrafika@gmail.com
                   </a>
                 </div>
               </div>
@@ -101,7 +101,7 @@ const Contact = () => {
                 <FaMapMarkerAlt className="w-6 h-6 text-primary mt-1" />
                 <div>
                   <h4 className="font-semibold">Adresa</h4>
-                  <p className="text-gray-600">Mališe Atanackovića 18, 31000 Užice, Srbija</p>
+                  <p className="text-gray-600">Vuka Karadžića 52, 31000 Užice, Srbija</p>
                 </div>
               </div>
             </div>
