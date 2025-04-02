@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center md:text-left">
             <img 
-              src="assets/images/rsz_1rsz_logo2.png" 
+              src="../assets/images/rsz_1rsz_logo2.png" 
               alt="3D Grafika Logo" 
               className="h-25 mb-4 mx-auto md:mx-0"
             />
